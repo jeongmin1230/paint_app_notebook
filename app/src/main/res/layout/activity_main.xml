@@ -50,7 +50,7 @@
             android:id="@+id/blue"
             android:onClick="onClick"
             android:layout_marginRight="10dp"
-            android:background="#0091EA"/>
+            android:background="#37AFF8"/>
         <TextView
             android:layout_width="30dp"
             android:layout_height="30dp"

@@ -34,33 +34,43 @@ public class MainActivity extends AppCompatActivity {
         switch(view.getId()){ // 텍스트뷰를 누를 때마다 switch - case 문으로 버튼 누를 때마다 글자 색이 toast 메세지로 출력됨
             case R.id.red:
                 Toast.makeText(getApplicationContext(), "click red", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#ff0000")); // Color.parseColor("#16진수"); 하면 원하는 색으로 변경
                 break;
             case R.id.orange:
                 Toast.makeText(getApplicationContext(), "click orange", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#FFAB40"));
                 break;
             case R.id.yellow:
-                Toast.makeText(getApplicationContext(), "click yellow", Toast.LENGTH_SHORT).show();;
+                Toast.makeText(getApplicationContext(), "click yellow", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#FFFF00"));
                 break;
             case R.id.green:
                 Toast.makeText(getApplicationContext(), "click green", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#64DD17"));
                 break;
             case R.id.blue:
                 Toast.makeText(getApplicationContext(), "click blue", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#37AFF8"));
                 break;
             case R.id.indigo:
                 Toast.makeText(getApplicationContext(), "click indigo", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#304FFE"));
                 break;
             case R.id.purple:
                 Toast.makeText(getApplicationContext(), "click purple", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#AA00FF"));
                 break;
             case R.id.pink:
                 Toast.makeText(getApplicationContext(), "click pink", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#FF00BF"));
                 break;
             case R.id.white:
                 Toast.makeText(getApplicationContext(), "click white", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#FBF8F8"));
                 break;
             case R.id.black:
                 Toast.makeText(getApplicationContext(), "click black", Toast.LENGTH_SHORT).show();
+                myView.mPaint.setColor(Color.parseColor("#000000"));
                 break;
         }
     }
