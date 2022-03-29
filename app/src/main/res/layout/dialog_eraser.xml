@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="선 굵기 선택"
+        android:text="지우개 굵기 선택"
         android:fontFamily="@font/garam_lotus"
         android:textSize="40dp"
         android:layout_gravity="center_horizontal" />
@@ -20,7 +20,7 @@
         android:orientation="vertical">
 
         <RadioButton
-            android:id="@+id/rb_thin"
+            android:id="@+id/rb_thin_eraser"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:text="가늘게" />
 
         <RadioButton
-            android:id="@+id/rb_middle"
+            android:id="@+id/rb_middle_eraser"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:text="중간" />
 
         <RadioButton
-            android:id="@+id/rb_thick"
+            android:id="@+id/rb_thick_eraser"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,4 +52,5 @@
             android:layout_weight="1"
             android:text="굵게" />
     </RadioGroup>
+
 </LinearLayout>

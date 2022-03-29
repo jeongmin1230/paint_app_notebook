@@ -130,6 +130,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onClickErase"
             android:textSize="20dp"
             android:fontFamily="@font/garam_lotus"
             android:text="지우개" />

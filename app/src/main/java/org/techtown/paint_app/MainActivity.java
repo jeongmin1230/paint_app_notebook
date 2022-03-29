@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity  {
 
-    Dialog dialog_thickness;
+    Dialog dialog_thickness, dialog_eraser;
     private MyPaintView myView;
 
     @Override
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity  {
                 myView.mPaint.setColor(Color.parseColor("#000000"));
                 break;
         }
-        switch (view.getId()) {
+        switch (view.getId()) { // 펜 굵기 버튼 눌렀을 때
             case R.id.rb_thin: //가늘게 버튼을 눌렀을 때
                 Toast.makeText(getApplicationContext(), "펜 굵기를 [가늘게]로 선택했습니다.", Toast.LENGTH_SHORT).show();
                 dialog_thickness.dismiss();
@@ -96,6 +96,28 @@ public class MainActivity extends AppCompatActivity  {
                 myView.mPaint.setStrokeWidth(30);
                 break;
         }
+        switch (view.getId()) { // 지우개 버튼 눌렀을 때
+            case R.id.rb_thin_eraser: //가늘게 지우개 버튼을 눌렀을 때
+                Toast.makeText(getApplicationContext(), "지우개 굵기를 [가늘게]로 선택했습니다.", Toast.LENGTH_SHORT).show();
+                dialog_eraser.dismiss();
+                myView.mPaint.setColor(Color.parseColor("#F0F4C3")); // 방법을 못찾아서 그냥 펜을 배경 색으로 변경..
+                myView.mPaint.setStrokeWidth(10);
+                break;
+
+            case R.id.rb_middle_eraser: //중간 지우개 버튼을 눌렀을 때
+                Toast.makeText(getApplicationContext(), "지우개 굵기를 [중간]으로 선택했습니다.", Toast.LENGTH_SHORT).show();
+                dialog_eraser.dismiss();
+                myView.mPaint.setColor(Color.parseColor("#F0F4C3"));
+                myView.mPaint.setStrokeWidth(20);
+                break;
+
+            case R.id.rb_thick_eraser: //두껍게 지우개 버튼을 눌렀을 때
+                Toast.makeText(getApplicationContext(), "지우개 굵기를 [두껍게]로 선택했습니다.", Toast.LENGTH_SHORT).show();
+                dialog_eraser.dismiss();
+                myView.mPaint.setColor(Color.parseColor("#F0F4C3"));
+                myView.mPaint.setStrokeWidth(30);
+                break;
+        }
     }
 
     public void onClickSave(View view) { // 이미지 저장 버튼 눌렀을 때 인텐트 이동
@@ -104,7 +126,7 @@ public class MainActivity extends AppCompatActivity  {
         startActivity(intent);
     }
 
-    public void onClickThicknessDialog(View view) {
+    public void onClickThicknessDialog(View view) { // 펜 굵기 선택
         dialog_thickness = new Dialog(MainActivity.this); // Dialog 초기화
         dialog_thickness.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog_thickness.setContentView(R.layout.dialog_thickness); // 만든 dialog_thickness 랑 연결
@@ -112,6 +134,16 @@ public class MainActivity extends AppCompatActivity  {
         dialog_thickness.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
 
         dialog_thickness.show(); // 다이얼로그 띄우기
+    }
+
+    public void onClickErase(View view)  { // 지우개
+        dialog_eraser = new Dialog(MainActivity.this); // Dialog 초기화
+        dialog_eraser.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog_eraser.setContentView(R.layout.dialog_eraser); // 만든 dialog_eraser 랑 연결
+
+        dialog_eraser.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
+
+        dialog_eraser.show(); // 다이얼로그 띄우기
     }
 
     private static class MyPaintView extends View {
@@ -125,7 +157,7 @@ public class MainActivity extends AppCompatActivity  {
             super(context);
             mPath = new Path();
             mPaint = new Paint();
-            mPaint.setColor(Color.RED);
+            mPaint.setColor(Color.BLACK);
             mPaint.setAntiAlias(true);
             mPaint.setStrokeWidth(10);
             mPaint.setStyle(Paint.Style.STROKE);
