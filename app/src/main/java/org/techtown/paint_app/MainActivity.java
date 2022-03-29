@@ -2,6 +2,8 @@
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,11 +14,13 @@ import android.graphics.Path;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
+    Dialog dialog_thickness;
     private MyPaintView myView;
 
     @Override
@@ -73,6 +77,25 @@ public class MainActivity extends AppCompatActivity {
                 myView.mPaint.setColor(Color.parseColor("#000000"));
                 break;
         }
+        switch (view.getId()) {
+            case R.id.rb_thin: //가늘게 버튼을 눌렀을 때
+                Toast.makeText(getApplicationContext(), "펜 굵기를 [가늘게]로 선택했습니다.", Toast.LENGTH_SHORT).show();
+                dialog_thickness.dismiss();
+                myView.mPaint.setStrokeWidth(10);
+                break;
+
+            case R.id.rb_middle: //중간 버튼을 눌렀을 때
+                Toast.makeText(getApplicationContext(), "펜 굵기를 [중간]으로 선택했습니다.", Toast.LENGTH_SHORT).show();
+                dialog_thickness.dismiss();
+                myView.mPaint.setStrokeWidth(20);
+                break;
+
+            case R.id.rb_thick: //두껍게 버튼을 눌렀을 때
+                Toast.makeText(getApplicationContext(), "펜 굵기를 [두껍게]로 선택했습니다.", Toast.LENGTH_SHORT).show();
+                dialog_thickness.dismiss();
+                myView.mPaint.setStrokeWidth(30);
+                break;
+        }
     }
 
     public void onClickSave(View view) { // 이미지 저장 버튼 눌렀을 때 인텐트 이동
@@ -80,11 +103,24 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
+    public void onClickThicknessDialog(View view) {
+        dialog_thickness = new Dialog(MainActivity.this); // Dialog 초기화
+        dialog_thickness.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog_thickness.setContentView(R.layout.dialog_thickness); // 만든 dialog_thickness 랑 연결
+
+        dialog_thickness.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
+
+        dialog_thickness.show(); // 다이얼로그 띄우기
+    }
+
     private static class MyPaintView extends View {
+
         private Bitmap mBitmap;
         private Canvas mCanvas;
         private Path mPath;
         private Paint mPaint;
+
         public MyPaintView(Context context) {
             super(context);
             mPath = new Path();

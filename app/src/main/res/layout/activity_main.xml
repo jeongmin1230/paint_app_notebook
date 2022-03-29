@@ -113,18 +113,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
+            android:onClick="onClickThicknessDialog"
+            android:textSize="20dp"
+            android:fontFamily="@font/garam_lotus"
             android:text="펜 굵기" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
+            android:textSize="20dp"
+            android:fontFamily="@font/garam_lotus"
             android:text="이미지 저장"
             android:onClick="onClickSave"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:fontFamily="@font/garam_lotus"
             android:text="지우개" />
 
     </LinearLayout>
