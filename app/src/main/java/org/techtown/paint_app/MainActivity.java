@@ -39,7 +39,9 @@ import java.util.Date;
     Button btnThicknessPen, btnThicknessEraser;
     private MyPaintView myView;
 
-    // toggle 기능을 위해 count 변수 선언 -> 버튼을 누를 때마다 증가시켜서 버튼 활성화, 비활성화 할 것임
+    LinearLayout ll1;
+
+    // toggle 기능을 위해 count 변수 선언 -> 버튼을 누를 때마다 증가시켜서 버튼 활성화, 비활성화 할 것임(처음엔 기본이 펜 이기 때문에 펜 굵기 버튼 비활성화를 위해 count 0부터 시작
      int count = 0;
 
     @Override
@@ -51,6 +53,8 @@ import java.util.Date;
 
         btnThicknessPen = findViewById(R.id.btnThicknessPen);
         btnThicknessEraser = findViewById(R.id.btnThicknessEraser);
+
+        ll1 = (LinearLayout) findViewById(R.id.ll1);
 
         ((LinearLayout) findViewById(R.id.paintArea)).addView(myView);
 
@@ -173,14 +177,17 @@ import java.util.Date;
         dialog_thickness.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
         dialog_thickness.show(); // 다이얼로그 띄우기
 
-        if(count % 2 == 0) { // count 가 짝수 일 경우
+        if(count % 2 == 1) { // count 가 홀수 일 경우
+
+            ll1.setVisibility(ll1.VISIBLE);
+
             btnThicknessEraser.setEnabled(true);
             btnThicknessEraser.setBackgroundColor((Color.parseColor("#EDE7F6")));
 
             btnThicknessPen.setEnabled(false);
             btnThicknessPen.setBackgroundColor((Color.parseColor("#E1BEE7")));
         }
-        count++;
+        ++count;
         Log.i("jeongmin", "펜 버튼 눌렀을 때의 count : "+ count);
     }
 
@@ -191,14 +198,17 @@ import java.util.Date;
         dialog_eraser.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
         dialog_eraser.show(); // 다이얼로그 띄우기
 
-        if(count % 2 == 1) { // count 가 홀수 일 경우
+        if(count % 2 == 0) { // count 가 짝수 일 경우
+
+            ll1.setVisibility(ll1.INVISIBLE); // 색 지정할 수 있는 레이아웃 안보이게
+
             btnThicknessPen.setEnabled(true);
             btnThicknessPen.setBackgroundColor((Color.parseColor("#EDE7F6")));
 
             btnThicknessEraser.setEnabled(false);
             btnThicknessEraser.setBackgroundColor((Color.parseColor("#E1BEE7")));
         }
-        count++;
+        ++count;
         Log.i("jeongmin", "지우개 버튼 눌렀을 경우 count : "+ count);
     }
 
