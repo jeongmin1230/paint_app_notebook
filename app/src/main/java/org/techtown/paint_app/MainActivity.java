@@ -2,26 +2,45 @@
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity  {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+ public class MainActivity extends AppCompatActivity  {
 
     Dialog dialog_thickness, dialog_eraser;
+    Button btnThicknessPen, btnThicknessEraser;
     private MyPaintView myView;
+
+    // toggle 기능을 위해 count 변수 선언 -> 버튼을 누를 때마다 증가시켜서 버튼 활성화, 비활성화 할 것임
+     int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +49,23 @@ public class MainActivity extends AppCompatActivity  {
 
         myView = new MyPaintView(this);
 
-        ((LinearLayout) findViewById(R.id.ll2)).addView(myView);
+        btnThicknessPen = findViewById(R.id.btnThicknessPen);
+        btnThicknessEraser = findViewById(R.id.btnThicknessEraser);
+
+        ((LinearLayout) findViewById(R.id.paintArea)).addView(myView);
+
+        // storage 접근 권한 확인
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(getApplicationContext(), "외부 저장소 사용을 위해 읽기/쓰기 필요", Toast.LENGTH_SHORT).show();
+                }
+
+                requestPermissions(new String[]
+                        {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+            }
+        }
     }
 
     public void onClick(View view) {
@@ -120,30 +155,51 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void onClickSave(View view) { // 이미지 저장 버튼 눌렀을 때 인텐트 이동
+    public void onClickSave(View view) { // 이미지 저장 버튼 눌렀을 때 이미지 저장하고 인텐트 이동
         Intent intent = new Intent(MainActivity.this, AfterSaveActivity.class);
+
+        LinearLayout paintArea = (LinearLayout) findViewById(R.id.paintArea); // paintArea 영역을 가져옴
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss"); // 올해년도몇월며칠_몇시몇분몇초 형식으로 포맷하겠다.
+        LayoutCapture(paintArea, simpleDateFormat.format(new Date()));
 
         startActivity(intent);
     }
 
-    public void onClickThicknessDialog(View view) { // 펜 굵기 선택
+    public void onClickPenDialog(View view) { // 펜 굵기 선택
         dialog_thickness = new Dialog(MainActivity.this); // Dialog 초기화
         dialog_thickness.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog_thickness.setContentView(R.layout.dialog_thickness); // 만든 dialog_thickness 랑 연결
-
         dialog_thickness.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
-
         dialog_thickness.show(); // 다이얼로그 띄우기
+
+        if(count % 2 == 0) { // count 가 짝수 일 경우
+            btnThicknessEraser.setEnabled(true);
+            btnThicknessEraser.setBackgroundColor((Color.parseColor("#EDE7F6")));
+
+            btnThicknessPen.setEnabled(false);
+            btnThicknessPen.setBackgroundColor((Color.parseColor("#E1BEE7")));
+        }
+        count++;
+        Log.i("jeongmin", "펜 버튼 눌렀을 때의 count : "+ count);
     }
 
-    public void onClickErase(View view)  { // 지우개
+    public void onClickEraserDialog(View view)  { // 지우개
         dialog_eraser = new Dialog(MainActivity.this); // Dialog 초기화
         dialog_eraser.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog_eraser.setContentView(R.layout.dialog_eraser); // 만든 dialog_eraser 랑 연결
-
         dialog_eraser.setCancelable(false); // 다이얼로그 영역 밖 눌러도 꺼지지 않도록 설정
-
         dialog_eraser.show(); // 다이얼로그 띄우기
+
+        if(count % 2 == 1) { // count 가 홀수 일 경우
+            btnThicknessPen.setEnabled(true);
+            btnThicknessPen.setBackgroundColor((Color.parseColor("#EDE7F6")));
+
+            btnThicknessEraser.setEnabled(false);
+            btnThicknessEraser.setBackgroundColor((Color.parseColor("#E1BEE7")));
+        }
+        count++;
+        Log.i("jeongmin", "지우개 버튼 눌렀을 경우 count : "+ count);
     }
 
     private static class MyPaintView extends View {
@@ -198,4 +254,44 @@ public class MainActivity extends AppCompatActivity  {
             return true;
         }
     }
+     // LayoutCapture 클래스 생성
+     public void LayoutCapture(View view, String title) {
+         if(view == null) { // 뷰가 비어있을 경우의 예외처리
+             Log.i("jeongmin", "<LayoutCapture 클래스 if문 안>view is null!!");
+             return;
+         }
+         Log.i("jeongmin", "<LayoutCapture 클래스 안>view is not null!!");
+
+         view.buildDrawingCache(); // 캐시 비트맵 만들기
+         Bitmap bitmap = view.getDrawingCache();
+         FileOutputStream fos = null;
+
+         // 파일 저장
+         String strPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+ "/paint";
+
+         Log.i("jeongmin", "<LayoutCapture 클래스 안>경로 : " + strPath);
+
+         File uploadFolder = new File(strPath);
+         Log.i("jeongmin", "<LayoutCapture 클래스 안>업로드 경로 설정 : view_capture 라는 폴더 생성해서 그 폴더에 저장 하려고 위에처럼 경로 설정" + uploadFolder);
+
+         String fileName = title + ".jpg";
+
+         File tempFile = new File(strPath, fileName);
+
+         try {
+             if(!uploadFolder.exists()) { // 만약 지정 폴더가 없으면 생성
+                 uploadFolder.mkdirs();
+             }
+
+             fos = new FileOutputStream(tempFile); // 경로 + 제목 + .jpg 로 FileOutputStream Setting
+             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+             Toast.makeText(getApplicationContext(), "이미지 파일로 저장했습니다.", Toast.LENGTH_SHORT).show();
+         } catch (FileNotFoundException e) {
+             e.printStackTrace();
+             Log.i("jeongmin", "<try - catch 의 catch 문 속>");
+             Log.i("jeongmin", "파일을 찾을 수 없습니다.");
+         }
+         // 이미지 스캐닝 해서 갤러리에서 보이게 해 주는 코드
+         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(tempFile)));
+     }
 }

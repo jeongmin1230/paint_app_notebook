@@ -64,7 +64,7 @@
             android:id="@+id/purple"
             android:onClick="onClick"
             android:layout_marginRight="10dp"
-            android:background="#AA00FF"/>
+            android:background="#5900FF"/>
         <TextView
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -96,7 +96,7 @@
         android:layout_marginRight="10dp"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:id="@+id/ll2" >
+        android:id="@+id/paintArea" >
 
 
     </LinearLayout>
@@ -112,10 +112,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/btnThicknessPen"
             android:layout_marginRight="40dp"
-            android:onClick="onClickThicknessDialog"
+            android:onClick="onClickPenDialog"
             android:textSize="20dp"
             android:fontFamily="@font/garam_lotus"
+            android:backgroundTint="#EDE7F6"
+            android:textColor="@color/black"
             android:text="펜 굵기" />
 
         <Button
@@ -125,13 +128,18 @@
             android:textSize="20dp"
             android:fontFamily="@font/garam_lotus"
             android:text="이미지 저장"
+            android:backgroundTint="#EDE7F6"
+            android:textColor="@color/black"
             android:onClick="onClickSave"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClickErase"
+            android:id="@+id/btnThicknessEraser"
+            android:onClick="onClickEraserDialog"
             android:textSize="20dp"
+            android:backgroundTint="#EDE7F6"
+            android:textColor="@color/black"
             android:fontFamily="@font/garam_lotus"
             android:text="지우개" />
 
